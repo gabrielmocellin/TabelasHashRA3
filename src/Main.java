@@ -10,9 +10,15 @@ public class Main {
         g.inserir(new Aluno(21, "Ana"));
         g.inserir(new Aluno(20, "Carlos"));
         g.imprimir();
-        Aluno alunoteste = g.buscar(31, false);
         g.remover(31);
+        g.imprimir();
         g.remover(11);
+        g.imprimir();
+        g.remover(21);
+        g.imprimir();
+        g.remover(21);
+        g.imprimir();
+        g.inserir(new Aluno(41, "Amanda"));
         g.imprimir();
     }
 }

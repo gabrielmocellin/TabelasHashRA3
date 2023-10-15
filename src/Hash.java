@@ -15,6 +15,17 @@ public class Hash{
         int index_calculado = FuncaoHash(chave);
         Aluno aluno_buscado = this.estrutura[index_calculado];
 
+        if(aluno_buscado.getRa() == chave){return aluno_buscado;}
+        else{
+            if(aluno_buscado != null && !aluno_buscado.isVazio()){
+                while(aluno_buscado.temProx()) {
+                    if(para_remover && (aluno_buscado.getProx().getRa() == chave)) return aluno_buscado;
+                    if(aluno_buscado.getRa() == chave) return aluno_buscado;
+                    aluno_buscado = aluno_buscado.getProx();
+                }
+            }
+        }
+
         if(aluno_buscado != null && !aluno_buscado.isVazio()){
             while(aluno_buscado.temProx()) {
                 if(para_remover && (aluno_buscado.getProx().getRa() == chave)) return aluno_buscado;
@@ -52,21 +63,28 @@ public class Hash{
     }
 
     public Aluno remover(int chave){
-        int   index_calculado = this.FuncaoHash(chave);
+        int index_calculado = FuncaoHash(chave);
+        Aluno aluno = this.estrutura[index_calculado];
 
-        Aluno aluno_removido  = this.buscar(chave, true); // devolve o anterior
-
-        if((aluno_removido!=null) && (aluno_removido).getProx() != null){
-            aluno_removido.setProx(aluno_removido.getProx().getProx());
+        if(aluno != null && aluno.getRa() == chave){ // É o primeiro da "lista"
+            if(aluno.temProx()){ // Possui links
+                this.estrutura[index_calculado] = aluno.getProx();
+            } else{ // Não possui links
+                this.estrutura[index_calculado] = null;
+            }
+        } else{ // TEM PRÓXIMO e NÃO É O PRIMEIRO
+            while(aluno.temProx()){
+                if(aluno.getProx().getRa() == chave){
+                    Aluno tmp = aluno.getProx();
+                    aluno.setProx(aluno.getProx().getProx());
+                    return tmp;
+                }
+                aluno = aluno.getProx();
+            }
         }
-        if(this.estrutura[index_calculado] == null) {this.estrutura[index_calculado] = null;}
-        // Deve ser verificado se o atual tem proximo:
-        //      Caso tenha: o próximo deve ficar na posição atual.
-        //      Caso não: deve ser colocado na posição atual.
-        // Se o atual tem link para trás e para frente, o de trás deve pegar o link da frente tipo: aluno_anterior.setProx(aluno_removido.getProx());
-        this.quant_itens--;
 
-        return aluno_removido;
+        if(aluno != null){this.quant_itens--;}
+        return aluno;
     }
 
     public void imprimir(){ // Printando todos os elementos contidos na hash até o momemento.
