@@ -17,7 +17,7 @@ public class Hash{
 
         if(aluno_buscado.getRa() == chave){return aluno_buscado;}
         else{
-            if(aluno_buscado != null && !aluno_buscado.isVazio()){
+            if(aluno_buscado != null){
                 while(aluno_buscado.temProx()) {
                     if(para_remover && (aluno_buscado.getProx().getRa() == chave)) return aluno_buscado;
                     if(aluno_buscado.getRa() == chave) return aluno_buscado;
@@ -26,7 +26,7 @@ public class Hash{
             }
         }
 
-        if(aluno_buscado != null && !aluno_buscado.isVazio()){
+        if(aluno_buscado != null){
             while(aluno_buscado.temProx()) {
                 if(para_remover && (aluno_buscado.getProx().getRa() == chave)) return aluno_buscado;
                 if(aluno_buscado.getRa() == chave) return aluno_buscado;
@@ -47,11 +47,14 @@ public class Hash{
         int index_calculado = FuncaoHash( aluno.getRa() );
         Aluno aluno_no_indice = this.estrutura[index_calculado];
 
-        if(aluno_no_indice == null || aluno_no_indice.isVazio()){
+        if(aluno_no_indice == null){
             this.estrutura[index_calculado] = aluno;
         } else{
             while(aluno_no_indice.temProx()){
-                if(aluno_no_indice.getProx() != null){aluno_no_indice = aluno_no_indice.getProx(); continue;}
+                if(aluno_no_indice.getProx() != null){
+                    aluno_no_indice = aluno_no_indice.getProx();
+                    continue;
+                }
                 aluno_no_indice.setProx(aluno); // Caso não tenha um próximo definido, deve ser encadeado o aluno inserido no atual.
             }
             if(!aluno_no_indice.temProx()){
@@ -90,7 +93,7 @@ public class Hash{
     public void imprimir(){ // Printando todos os elementos contidos na hash até o momemento.
         for(int i = 0; i < this.max_posicoes; i++){
             Aluno aluno_no_indice = this.estrutura[i];
-            if(aluno_no_indice == null || aluno_no_indice.isVazio()){continue;} // Caso seja nulo (não tenha nenhum elemento contido no espaço da hash), não será feita a veirifcação do RA para não disparar uma exceção.
+            if(aluno_no_indice == null){continue;} // Caso seja nulo (não tenha nenhum elemento contido no espaço da hash), não será feita a veirifcação do RA para não disparar uma exceção.
             System.out.printf("(%d) %d, %s;   ", i, aluno_no_indice.getRa(), aluno_no_indice.getNome());
             while(aluno_no_indice.temProx()){
                 aluno_no_indice = aluno_no_indice.getProx();

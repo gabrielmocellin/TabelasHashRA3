@@ -23,6 +23,6 @@ public class Aluno {
     public boolean temProx() { return this.prox != null; }
     public void setProx(Aluno prox_aluno) { this.prox = prox_aluno; }
     public Aluno getProx(){ return this.prox; }
-    public boolean isVazio(){ return (this.ra == -1 || this.ra == -2); }
+    // public boolean isVazio(){ return (this.ra == -1 || this.ra == -2); }
 
 }
