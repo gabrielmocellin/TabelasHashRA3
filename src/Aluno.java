@@ -1,12 +1,11 @@
 public class Aluno {
     private final int ra;
     private final String nome;
-    private Aluno prox;
+    private Aluno prox = null;
 
     public Aluno(){
         this.ra = -1;
         this.nome = " ";
-        this.prox = null;
     }
 
     public Aluno(int ra, String nome) {

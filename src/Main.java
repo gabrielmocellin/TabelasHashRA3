@@ -1,24 +1,15 @@
 public class Main {
     public static void main(String[] args) {
-        Hash g = new Hash(10, 8);
-        // Menu menu = new Menu(g);
-        // menu.print();
-        g.inserir(new Aluno(11, "José"));
+        Hash g = new Hash(10);
         g.inserir(new Aluno(10, "Gabriel"));
-        g.inserir(new Aluno(21, "Marcelo"));
-        g.inserir(new Aluno(31, "Sheldon"));
-        g.inserir(new Aluno(21, "Ana"));
-        g.inserir(new Aluno(20, "Carlos"));
-        g.imprimir();
-        g.remover(31);
-        g.imprimir();
-        g.remover(11);
-        g.imprimir();
-        g.remover(21);
-        g.imprimir();
-        g.remover(21);
-        g.imprimir();
         g.inserir(new Aluno(41, "Amanda"));
+        g.inserir(new Aluno(42, "Joana"));
+        g.inserir(new Aluno(13, "Jonas"));
+        g.inserir(new Aluno(4, "Fabio"));
+        g.inserir(new Aluno(75, "Alves"));
+        g.inserir(new Aluno(66, "Bradley"));
+        g.inserir(new Aluno(57, "Malu"));
+        g.inserir(new Aluno(58, "Ronaldo"));
         g.imprimir();
     }
 }
