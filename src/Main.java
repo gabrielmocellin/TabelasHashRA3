@@ -29,7 +29,7 @@ public class Main {
 
 
 
-        Hash tHash = new Hash(4, false);
+        Hash tHash = new Hash(4, true);
         tHash.inserir(new Aluno(5, "Arnaldo"));
         tHash.inserir(new Aluno(9, "Amanda"));
         tHash.inserir(new Aluno(13, "Gabriel"));
@@ -51,17 +51,18 @@ public class Main {
         tHash.inserir(new Aluno(69, "Bob"));
         tHash.inserir(new Aluno(73, "Sergio"));
 
-        tHash.imprimir();
 
         tHash.inserir(new Aluno(2, "Maria"));
         tHash.inserir(new Aluno(1, "Alessandro"));
 
         tHash.imprimir();
 
-        long tempoInicial = System.currentTimeMillis();
+        tHash.remover(53);
+        tHash.imprimir();
+        tHash.buscar(100);
+        tHash.remover(100);
 
-        long tempoFinal = System.currentTimeMillis();
-        System.out.printf("Tempo final: [%d] ms%n", (tempoFinal - tempoInicial));
+        tHash.cronometrarBusca(65);
     }
 
     public static void print(String msg){

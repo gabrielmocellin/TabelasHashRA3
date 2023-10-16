@@ -27,14 +27,14 @@ public class Hash{
                 alunoBuscado = this.estruturaABB[indexCalculado].buscarAluno(chave);
             }
             if (alunoBuscado == null) {
-                System.out.println("Aluno não encontrado!");
+                System.out.println("[BUSCAR] Aluno não encontrado!");
             }
         }
         else {
             alunoBuscado = this.estruturaAluno[indexCalculado];
 
             if (alunoBuscado == null) {
-                System.out.println("Aluno não encontrado!");
+                System.out.println("[BUSCAR] Aluno não encontrado!");
             } else if (alunoBuscado.getRa() == chave) {
                 return alunoBuscado;
             } else {
@@ -91,11 +91,11 @@ public class Hash{
 
         if (usandoArvore) {
             if (this.estruturaABB[indexCalculado] == null) {
-                System.out.println("Aluno não encontrado!");
+                System.out.println("[REMOVER] Aluno não encontrado!");
             }
             else {
                 aluno = this.estruturaABB[indexCalculado].removerAluno(chave);
-                if(aluno == null) System.out.println("Aluno não encontrado!");
+                if(aluno == null) System.out.println("[REMOVER] Aluno não encontrado!");
             }
         }
         else {
@@ -123,6 +123,8 @@ public class Hash{
                         aluno = aluno.getProx();
                     }
                 }
+            } else {
+                System.out.println("[REMOVER] Aluno não encontrado!");
             }
         }
         return aluno;
@@ -206,5 +208,11 @@ public class Hash{
             }
         }
     }
-    
+
+    public void cronometrarBusca(int num){
+        long tempoInicial = java.lang.System.nanoTime();
+            this.buscar(num);
+        long tempoFinal = java.lang.System.nanoTime();
+        System.out.printf("Tempo final: [%.5f] ms%n", (float) (tempoFinal - tempoInicial) / 1000000);
+    }
 }
