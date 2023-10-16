@@ -1,39 +1,50 @@
 public class Hash{
-    private int max_posicoes, quant_itens;
+    private int maxPosicoes, quantItens;
     private Aluno[] estruturaAluno;
+    private Arvore[] estruturaABB;
+    private boolean usandoArvore;
 
-    public Hash(int tamanho_vetor){
-        this.quant_itens = 0;
-        this.max_posicoes = tamanho_vetor;
-        this.estruturaAluno = new Aluno[tamanho_vetor];
+    public Hash(int tamanho_vetor, boolean usandoArvore){
+        this.quantItens = 0;
+        this.maxPosicoes = tamanho_vetor;
+
+        if (usandoArvore) {
+            this.estruturaABB = new Arvore[tamanho_vetor];
+            this.usandoArvore = true;
+        } else {
+            this.estruturaAluno = new Aluno[tamanho_vetor];
+            this.usandoArvore = false;
+        }
     }
 
-    private int FuncaoHash(int chave){return (chave % this.max_posicoes);}
+    private int funcaoHash(int chave) { return (chave % this.maxPosicoes); }
 
-    public Aluno buscar(int chave, boolean para_remover){
-        int index_calculado = FuncaoHash(chave);
-        Aluno aluno_buscado = this.estruturaAluno[index_calculado];
+    public Aluno buscar(int chave){
+        int indexCalculado = funcaoHash(chave);
+        Aluno alunoBuscado = null;
+        if (usandoArvore) {
+            if (this.estruturaABB[indexCalculado] != null) {
+                alunoBuscado = this.estruturaABB[indexCalculado].buscarAluno(chave);
+            }
+            if (alunoBuscado == null) {
+                System.out.println("Aluno não encontrado!");
+            }
+        }
+        else {
+            alunoBuscado = this.estruturaAluno[indexCalculado];
 
-        if(aluno_buscado.getRa() == chave){return aluno_buscado;}
-        else{
-            if(aluno_buscado != null){
-                while(aluno_buscado.temProx()) {
-                    if(para_remover && (aluno_buscado.getProx().getRa() == chave)) return aluno_buscado;
-                    if(aluno_buscado.getRa() == chave) return aluno_buscado;
-                    aluno_buscado = aluno_buscado.getProx();
+            if (alunoBuscado == null) {
+                System.out.println("Aluno não encontrado!");
+            } else if (alunoBuscado.getRa() == chave) {
+                return alunoBuscado;
+            } else {
+                while (alunoBuscado.temProx()) {
+                    if (alunoBuscado.getRa() == chave) {return alunoBuscado;}
+                    alunoBuscado = alunoBuscado.getProx();
                 }
             }
         }
-
-        if(aluno_buscado != null){
-            while(aluno_buscado.temProx()) {
-                if(para_remover && (aluno_buscado.getProx().getRa() == chave)) return aluno_buscado;
-                if(aluno_buscado.getRa() == chave) return aluno_buscado;
-                aluno_buscado = aluno_buscado.getProx();
-            }
-        }
-
-        return aluno_buscado;
+        return alunoBuscado;
     }
 
     /*
@@ -43,67 +54,101 @@ public class Hash{
         2.2 Caso não esteja vago, deve ser encadeado com o aluno que já está na posição buscada;
     */
     public void inserir(Aluno aluno){
-        int index_calculado = FuncaoHash( aluno.getRa() );
-        Aluno aluno_no_indice = this.estruturaAluno[index_calculado];
-
-        if(aluno_no_indice == null){
-            this.estruturaAluno[index_calculado] = aluno;
-            this.quant_itens++;
-        } else{
-            while(aluno_no_indice.temProx()){
-                if(aluno_no_indice.getProx() != null){
-                    aluno_no_indice = aluno_no_indice.getProx();
-                    continue;
-                }
-                aluno_no_indice.setProx(aluno); // Caso não tenha um próximo definido, deve ser encadeado o aluno inserido no atual.
+        int indexCalculado = funcaoHash( aluno.getRa() );
+        if (usandoArvore) {
+            if (this.estruturaABB[indexCalculado] == null) {
+                this.estruturaABB[indexCalculado] = new Arvore(aluno);
+                this.quantItens++;
             }
-            if(!aluno_no_indice.temProx()){
-                aluno_no_indice.setProx(aluno);
+            else {
+                this.estruturaABB[indexCalculado].inserirAluno(aluno);
+            }
+        } else {
+            Aluno alunoNoIndice = this.estruturaAluno[indexCalculado];
+            if (alunoNoIndice == null) {
+                this.estruturaAluno[indexCalculado] = aluno;
+                this.quantItens++;
+            } else {
+                while (alunoNoIndice.temProx()) {
+                    if (alunoNoIndice.getProx() != null) {
+                        alunoNoIndice = alunoNoIndice.getProx();
+                        continue;
+                    }
+                    alunoNoIndice.setProx(aluno); // Caso não tenha um próximo definido, deve ser encadeado o aluno inserido no atual.
+                }
+                if (!alunoNoIndice.temProx()) {
+                    alunoNoIndice.setProx(aluno);
+                }
             }
         }
-
         this.verificarTamanho();
     }
 
-    public Aluno remover(int chave){
-        int index_calculado = FuncaoHash(chave);
-        Aluno aluno = this.estruturaAluno[index_calculado];
 
-        if(aluno != null) {
-            if(aluno.getRa() == chave) {  //É o primeiro da "lista"
-                if(aluno.temProx()){  //Possui links
-                    this.estruturaAluno[index_calculado] = aluno.getProx();
-                }
-                else{  //Não possui links
-                    this.estruturaAluno[index_calculado] = null;
-                }
-                this.quant_itens--;
-                return aluno;
+    public Aluno remover(int chave){
+        int indexCalculado = funcaoHash(chave);
+        Aluno aluno = null;
+
+        if (usandoArvore) {
+            if (this.estruturaABB[indexCalculado] == null) {
+                System.out.println("Aluno não encontrado!");
             }
-            else if(aluno.getProx() != null) { //Não é o primeiro, mas tem próximos
-                while(aluno.temProx()){
-                    if (aluno.getProx().getRa() == chave) {
-                        Aluno tmp = aluno.getProx();
-                        aluno.setProx(tmp.getProx());
-                        this.quant_itens--;
-                        return tmp;
+            else {
+                aluno = this.estruturaABB[indexCalculado].removerAluno(chave);
+                if(aluno == null) System.out.println("Aluno não encontrado!");
+            }
+        }
+        else {
+            aluno = this.estruturaAluno[indexCalculado];
+
+            if(aluno != null) {
+                if(aluno.getRa() == chave) {  //É o primeiro da "lista"
+                    if (aluno.temProx()){  //Possui links
+                        this.estruturaAluno[indexCalculado] = aluno.getProx();
                     }
-                    aluno = aluno.getProx();
+                    else {  //Não possui links
+                        this.estruturaAluno[indexCalculado] = null;
+                    }
+                    this.quantItens--;
+                    return aluno;
+                }
+                else if(aluno.getProx() != null) { //Não é o primeiro, mas tem próximos
+                    while(aluno.temProx()) {
+                        if (aluno.getProx().getRa() == chave) {
+                            Aluno tmp = aluno.getProx();
+                            aluno.setProx(tmp.getProx());
+                            this.quantItens--;
+                            return tmp;
+                        }
+                        aluno = aluno.getProx();
+                    }
                 }
             }
         }
-        return null;
+        return aluno;
     }
 
     public void imprimir(){ // Printando todos os elementos contidos na hash até o momemento.
-        System.out.printf("%nTamanho [ARRAY] atual : [%d] %n", this.max_posicoes);
-        for(int i = 0; i < this.max_posicoes; i++){
-            Aluno aluno_no_indice = this.estruturaAluno[i];
-            if(aluno_no_indice == null){continue;} // Caso seja nulo (não tenha nenhum elemento contido no espaço da hash), não será feita a verificação do RA para não disparar uma exceção.
-            System.out.printf("(%d) %d, %s;   ", i, aluno_no_indice.getRa(), aluno_no_indice.getNome());
-            while(aluno_no_indice.temProx()){
-                aluno_no_indice = aluno_no_indice.getProx();
-                System.out.printf("%d, %s;   ", aluno_no_indice.getRa(), aluno_no_indice.getNome());
+        System.out.printf("%nTamanho [ARRAY] atual : [%d] %n", this.maxPosicoes);
+        for(int i = 0; i < this.maxPosicoes; i++){
+            if(!usandoArvore) {
+                Aluno aluno_no_indice = this.estruturaAluno[i];
+                if (aluno_no_indice == null) {
+                    continue;
+                } // Caso seja nulo (não tenha nenhum elemento contido no espaço da hash), não será feita a verificação do RA para não disparar uma exceção.
+                System.out.printf("(%d) %d, %s;   ", i, aluno_no_indice.getRa(), aluno_no_indice.getNome());
+                while (aluno_no_indice.temProx()) {
+                    aluno_no_indice = aluno_no_indice.getProx();
+                    System.out.printf("%d, %s;   ", aluno_no_indice.getRa(), aluno_no_indice.getNome());
+                }
+            } else {
+                System.out.println("Posição [" + i + "]:");
+                if (this.estruturaABB[i] == null) {
+                    System.out.println("Vazio\n");
+                }
+                else {
+                    this.estruturaABB[i].print();
+                }
             }
         }
         System.out.println(" ");
@@ -111,7 +156,7 @@ public class Hash{
 
 
     public float fatorCarga(){ // AINDA NAO FEITO
-        return (float) this.quant_itens/this.max_posicoes;
+        return (float) this.quantItens/this.maxPosicoes;
     }
 
     public void verificarTamanho(){
@@ -122,25 +167,41 @@ public class Hash{
     }
 
     public void remanejarArray(){
-        int antiga_max_posicoes  = this.max_posicoes;
-        Aluno[] antiga_estrutura = this.estruturaAluno;
+        int antigaMaxPosicoes  = this.maxPosicoes;
+        this.maxPosicoes *= 2;
 
-        this.max_posicoes *= 2;
-        this.quant_itens = 0;
-        this.estruturaAluno = new Aluno[this.max_posicoes];
-        System.out.printf("%nNOVO TAMANHO: %d %n", this.max_posicoes);
+        if (usandoArvore) {
+            this.quantItens = 0;
+            Arvore[] antigaEstruturaABB = this.estruturaABB;
+            this.estruturaABB = new Arvore[this.maxPosicoes];
 
-        for(int i = 0; i < antiga_max_posicoes; i++){
-            Aluno aluno_no_indice = antiga_estrutura[i];
-            if(aluno_no_indice == null){continue;} // Caso seja nulo (não tenha nenhum elemento contido no espaço da hash), não será feita a veirifcação do RA para não disparar uma exceção.
+            for(int i = 0; i < antigaMaxPosicoes; i++){
+                Arvore arvore = antigaEstruturaABB[i];
+                if(arvore != null) {
+                    while (arvore.getRaiz() != null) {
+                        Aluno alunoRaiz = arvore.removerAluno(arvore.getRaiz().getRaAluno());
+                        this.inserir(alunoRaiz);
+                    }
+                }
+            }
+        }
+        else {
+            Aluno[] antiga_estrutura = this.estruturaAluno;
+            this.estruturaAluno = new Aluno[this.maxPosicoes];
+            System.out.printf("%nNOVO TAMANHO: %d %n", this.maxPosicoes);
 
-            this.inserir(aluno_no_indice);
+            for(int i = 0; i < antigaMaxPosicoes; i++){
+                Aluno alunoNoIndiceI = antiga_estrutura[i];
+                if(alunoNoIndiceI == null){continue;} // Caso seja nulo (não tenha nenhum elemento contido no espaço da hash), não será feita a veirifcação do RA para não disparar uma exceção.
 
-            while(aluno_no_indice.temProx()){
-                aluno_no_indice = aluno_no_indice.getProx();
-                Aluno aluno_removido = this.remover(aluno_no_indice.getRa());
-                if(aluno_removido != null){
-                    this.inserir( aluno_removido );
+                this.inserir(alunoNoIndiceI);
+
+                while(alunoNoIndiceI.temProx()){
+                    alunoNoIndiceI = alunoNoIndiceI.getProx();
+                    Aluno alunoRemovido = this.remover(alunoNoIndiceI.getRa());
+                    if(alunoRemovido != null){
+                        this.inserir( alunoRemovido );
+                    }
                 }
             }
         }
