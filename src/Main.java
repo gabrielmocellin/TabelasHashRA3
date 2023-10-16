@@ -27,7 +27,7 @@ public class Main {
                 o aluno é retornado
         */
 
-        long tempoInicial = System.currentTimeMillis();
+
 
         Hash tHash = new Hash(4, false);
         tHash.inserir(new Aluno(5, "Arnaldo"));
@@ -41,22 +41,25 @@ public class Main {
         tHash.inserir(new Aluno(33, "Malu"));
         tHash.inserir(new Aluno(37, "Ronaldo"));
         tHash.inserir(new Aluno(40, "Marquin"));
-        /*
+
         tHash.inserir(new Aluno(45, "Tadeu"));
         tHash.inserir(new Aluno(49, "Osvaldo"));
         tHash.inserir(new Aluno(53, "Creuza"));
-        tHash.inserir(new Aluno(57, "Cintia"));
+        tHash.inserir(new Aluno(6, "Cintia"));
         tHash.inserir(new Aluno(61, "Sandra"));
         tHash.inserir(new Aluno(65, "Alice"));
         tHash.inserir(new Aluno(69, "Bob"));
         tHash.inserir(new Aluno(73, "Sergio"));
-        tHash.imprimir();
-        tHash.inserir(new Aluno(2, "Sergio2"));
-        tHash.inserir(new Aluno(1, "Sergio6"));
-         */
+
         tHash.imprimir();
 
-        tHash.buscar(69);
+        tHash.inserir(new Aluno(2, "Maria"));
+        tHash.inserir(new Aluno(1, "Alessandro"));
+
+        tHash.imprimir();
+
+        long tempoInicial = System.currentTimeMillis();
+
         long tempoFinal = System.currentTimeMillis();
         System.out.printf("Tempo final: [%d] ms%n", (tempoFinal - tempoInicial));
     }

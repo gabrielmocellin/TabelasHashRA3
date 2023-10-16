@@ -132,15 +132,16 @@ public class Hash{
         System.out.printf("%nTamanho [ARRAY] atual : [%d] %n", this.maxPosicoes);
         for(int i = 0; i < this.maxPosicoes; i++){
             if(!usandoArvore) {
-                Aluno aluno_no_indice = this.estruturaAluno[i];
-                if (aluno_no_indice == null) {
+                Aluno alunoNoIndiceI = this.estruturaAluno[i];
+                if (alunoNoIndiceI == null) {
                     continue;
                 } // Caso seja nulo (não tenha nenhum elemento contido no espaço da hash), não será feita a verificação do RA para não disparar uma exceção.
-                System.out.printf("(%d) %d, %s;   ", i, aluno_no_indice.getRa(), aluno_no_indice.getNome());
-                while (aluno_no_indice.temProx()) {
-                    aluno_no_indice = aluno_no_indice.getProx();
-                    System.out.printf("%d, %s;   ", aluno_no_indice.getRa(), aluno_no_indice.getNome());
+                System.out.printf("(%d) %d, %s;   ", i, alunoNoIndiceI.getRa(), alunoNoIndiceI.getNome());
+                while (alunoNoIndiceI.temProx()) {
+                    alunoNoIndiceI = alunoNoIndiceI.getProx();
+                    System.out.printf("%d, %s;   ", alunoNoIndiceI.getRa(), alunoNoIndiceI.getNome());
                 }
+                System.out.println();
             } else {
                 System.out.println("Posição [" + i + "]:");
                 if (this.estruturaABB[i] == null) {
@@ -169,9 +170,9 @@ public class Hash{
     public void remanejarArray(){
         int antigaMaxPosicoes  = this.maxPosicoes;
         this.maxPosicoes *= 2;
+        this.quantItens = 0;
 
         if (usandoArvore) {
-            this.quantItens = 0;
             Arvore[] antigaEstruturaABB = this.estruturaABB;
             this.estruturaABB = new Arvore[this.maxPosicoes];
 
@@ -186,24 +187,24 @@ public class Hash{
             }
         }
         else {
-            Aluno[] antiga_estrutura = this.estruturaAluno;
+            Aluno[] antigaEstruturaAluno = this.estruturaAluno;
             this.estruturaAluno = new Aluno[this.maxPosicoes];
+
             System.out.printf("%nNOVO TAMANHO: %d %n", this.maxPosicoes);
 
             for(int i = 0; i < antigaMaxPosicoes; i++){
-                Aluno alunoNoIndiceI = antiga_estrutura[i];
-                if(alunoNoIndiceI == null){continue;} // Caso seja nulo (não tenha nenhum elemento contido no espaço da hash), não será feita a veirifcação do RA para não disparar uma exceção.
-
-                this.inserir(alunoNoIndiceI);
-
-                while(alunoNoIndiceI.temProx()){
-                    alunoNoIndiceI = alunoNoIndiceI.getProx();
-                    Aluno alunoRemovido = this.remover(alunoNoIndiceI.getRa());
-                    if(alunoRemovido != null){
-                        this.inserir( alunoRemovido );
+                Aluno alunoNoIndiceI = antigaEstruturaAluno[i];
+                if (alunoNoIndiceI != null) { // Caso seja nulo (não tenha nenhum elemento contido no espaço da hash), não será feita a veirifcação do RA para não disparar uma exceção.
+                    this.inserir(alunoNoIndiceI);
+                    while(alunoNoIndiceI.temProx()){
+                        Aluno proximo = alunoNoIndiceI.getProx();
+                        alunoNoIndiceI.setProx(null);
+                        inserir(proximo);
+                        alunoNoIndiceI = proximo;
                     }
                 }
             }
         }
     }
+    
 }
