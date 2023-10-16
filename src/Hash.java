@@ -136,6 +136,7 @@ public class Hash{
             if(!usandoArvore) {
                 Aluno alunoNoIndiceI = this.estruturaAluno[i];
                 if (alunoNoIndiceI == null) {
+                    System.out.printf("(%d) Vazio;   %n", i);
                     continue;
                 } // Caso seja nulo (não tenha nenhum elemento contido no espaço da hash), não será feita a verificação do RA para não disparar uma exceção.
                 System.out.printf("(%d) %d, %s;   ", i, alunoNoIndiceI.getRa(), alunoNoIndiceI.getNome());

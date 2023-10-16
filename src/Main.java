@@ -27,9 +27,7 @@ public class Main {
                 o aluno é retornado
         */
 
-
-
-        Hash tHash = new Hash(4, true);
+        Hash tHash = new Hash(4, false);
         tHash.inserir(new Aluno(5, "Arnaldo"));
         tHash.inserir(new Aluno(9, "Amanda"));
         tHash.inserir(new Aluno(13, "Gabriel"));
